@@ -125,7 +125,7 @@ function Index() {
         aria-hidden
       />
       <div
-        className="orb h-[30rem] w-[30rem] bottom-[-10rem] left-1/3 bg-fuchsia-500/20"
+        className="orb h-[30rem] w-[30rem] bottom-[-10rem] left-1/3 bg-glow-accent/25"
         style={{ animationDelay: "-11s" }}
         aria-hidden
       />
@@ -208,8 +208,8 @@ function Index() {
           <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             {TRUST_POINTS.map((point) => (
               <li key={point} className="flex items-center gap-1.5">
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-400/20">
-                  <Check className="h-3 w-3 text-emerald-300" />
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-success/15">
+                  <Check className="h-3 w-3 text-success" />
                 </span>
                 {point}
               </li>
