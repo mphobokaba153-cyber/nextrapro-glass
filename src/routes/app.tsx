@@ -66,6 +66,7 @@ function AppPage() {
       const enabled = loadConfigs().filter((c) => c.enabled);
       if (enabled.length === 0) return;
       const pick = enabled[Math.floor(Math.random() * enabled.length)];
+      if (!pick) return;
       const action = Math.random() > 0.5 ? "BUY" : "SELL";
       const at = new Date().toLocaleTimeString([], {
         hour: "2-digit",
