@@ -1,6 +1,10 @@
 # Roadmap
 
-- [ ] App page (/app) tying together Home / MetaTrader / AI Scanner / Settings tabs with bottom glass tab bar — in progress
-- [ ] Floating server bubble shows after Start, draggable, opens signal box (built, needs end-to-end check)
-- [ ] iOS button on landing page opens the app (done)
-- [ ] Verify the full flow in the preview: start server, bubble appears, signals pop, tabs switch
+- [x] App page (/app) with Home / MetaTrader / AI Scanner / Settings tabs and bottom glass tab bar
+- [x] Floating server bubble after Start — draggable, tap to open signal box
+- [x] iOS button on landing page opens the app
+- [x] Verified end to end in the preview (server start, bubble, tabs, pairs sheet, iOS button, no console errors)
+
+Open for later (needs real backend):
+- [ ] Real signal feed (currently demo feed once pairs are saved)
+- [ ] License key activation screen
