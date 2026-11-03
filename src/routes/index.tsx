@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   ArrowRight,
@@ -249,20 +249,20 @@ function Index() {
                   </span>
                 </span>
               </a>
-              <span
-                className="glass flex items-center gap-3 rounded-2xl px-5 py-2.5 opacity-40"
-                aria-disabled
+              <Link
+                to="/app"
+                className="glass flex items-center gap-3 rounded-2xl px-5 py-2.5 transition-colors hover:bg-white/10"
               >
-                <Smartphone className="h-5 w-5" />
+                <Smartphone className="h-5 w-5 text-foreground" />
                 <span className="text-left leading-tight">
                   <span className="block text-[10px] text-muted-foreground">
-                    Coming soon to
+                    Open the
                   </span>
-                  <span className="block font-display text-sm font-semibold">
-                    iOS
+                  <span className="block font-display text-sm font-semibold text-foreground">
+                    iOS app
                   </span>
                 </span>
-              </span>
+              </Link>
             </div>
           </div>
         </section>
