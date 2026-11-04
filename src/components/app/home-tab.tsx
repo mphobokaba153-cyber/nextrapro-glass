@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Check,
   ChevronDown,
+  Plus,
   ScrollText,
   SlidersHorizontal,
   X,
@@ -178,7 +179,7 @@ export function PairsSheet({
   onClose: () => void;
 }) {
   const [rows, setRows] = useState<SymbolConfig[]>([]);
-  const [savedIdx, setSavedIdx] = useState<number | null>(null);
+  const [justSaved, setJustSaved] = useState(false);
 
   useEffect(() => {
     if (open) setRows(loadConfigs());
@@ -186,17 +187,21 @@ export function PairsSheet({
 
   if (!open) return null;
 
+  const toggle = (i: number) =>
+    setRows((r) =>
+      r.map((row, j) => (j === i ? { ...row, enabled: !row.enabled } : row)),
+    );
+
   const update = (i: number, patch: Partial<SymbolConfig>) =>
     setRows((r) => r.map((row, j) => (j === i ? { ...row, ...patch } : row)));
 
-  const saveRow = (i: number) => {
-    setRows((r) => {
-      const next = r.map((row, j) => (j === i ? { ...row, enabled: true } : row));
-      saveConfigs(next);
-      return next;
-    });
-    setSavedIdx(i);
-    window.setTimeout(() => setSavedIdx(null), 1400);
+  const selected = rows.filter((row) => row.enabled);
+  const unselected = rows.filter((row) => !row.enabled);
+
+  const saveAll = () => {
+    saveConfigs(rows);
+    setJustSaved(true);
+    window.setTimeout(() => setJustSaved(false), 1400);
   };
 
   return (
@@ -207,14 +212,14 @@ export function PairsSheet({
         onClick={onClose}
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
       />
-      <div className="animate-in fade-in slide-in-from-bottom-8 glass-strong relative z-10 flex max-h-[80vh] w-full max-w-md flex-col rounded-t-3xl">
+      <div className="animate-in fade-in slide-in-from-bottom-8 glass-strong relative z-10 flex max-h-[85vh] w-full max-w-md flex-col rounded-t-3xl">
         <div className="flex items-center justify-between border-b border-glass-border px-5 py-4">
           <div>
             <h2 className="font-display text-base font-bold text-foreground">
               Symbols
             </h2>
             <p className="mt-0.5 text-[11px] text-muted-foreground">
-              Pick lot size and trades per symbol, then Save
+              Tap a pair to select it, set lot &amp; trades, then Save
             </p>
           </div>
           <button
@@ -228,68 +233,116 @@ export function PairsSheet({
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-3">
-          <div className="flex flex-col gap-2">
-            {rows.map((row, i) => (
-              <div
-                key={row.symbol}
-                className="glass rounded-2xl p-3"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-sm font-bold text-foreground">
+          {/* Selected pairs */}
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-success">
+            Selected ({selected.length})
+          </p>
+          {selected.length === 0 ? (
+            <p className="glass mb-5 rounded-2xl px-4 py-3 text-xs text-muted-foreground">
+              No pairs selected yet — tap a pair below to add it.
+            </p>
+          ) : (
+            <div className="mb-5 flex flex-col gap-2">
+              {selected.map((row) => {
+                const i = rows.indexOf(row);
+                return (
+                  <div key={row.symbol} className="glass rounded-2xl p-3">
+                    <button
+                      type="button"
+                      onClick={() => toggle(i)}
+                      className="flex w-full items-center justify-between text-left"
+                      aria-label={`Remove ${row.symbol}`}
+                    >
+                      <span className="font-display text-sm font-bold text-foreground">
+                        {row.symbol}
+                      </span>
+                      <span className="flex items-center gap-1 rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-semibold text-success">
+                        <Check className="h-3 w-3" />
+                        Selected
+                      </span>
+                    </button>
+                    <div className="mt-2 flex items-center gap-2">
+                      <label className="flex-1">
+                        <span className="mb-1 block text-[10px] uppercase tracking-wider text-muted-foreground">
+                          Lot size
+                        </span>
+                        <input
+                          type="number"
+                          min="0.01"
+                          step="0.01"
+                          value={row.lot}
+                          onChange={(e) => update(i, { lot: e.target.value })}
+                          className="w-full rounded-xl border border-input bg-background/60 px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
+                        />
+                      </label>
+                      <label className="flex-1">
+                        <span className="mb-1 block text-[10px] uppercase tracking-wider text-muted-foreground">
+                          Trades
+                        </span>
+                        <input
+                          type="number"
+                          min="1"
+                          step="1"
+                          value={row.trades}
+                          onChange={(e) =>
+                            update(i, { trades: e.target.value })
+                          }
+                          className="w-full rounded-xl border border-input bg-background/60 px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
+                        />
+                      </label>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Not selected pairs */}
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+            Not selected ({unselected.length})
+          </p>
+          <div className="mb-4 grid grid-cols-2 gap-2">
+            {unselected.map((row) => {
+              const i = rows.indexOf(row);
+              return (
+                <button
+                  key={row.symbol}
+                  type="button"
+                  onClick={() => toggle(i)}
+                  className="glass flex items-center justify-between rounded-2xl px-3 py-3 text-left transition-colors hover:bg-white/10"
+                  aria-label={`Select ${row.symbol}`}
+                >
+                  <span className="font-display text-sm font-semibold text-muted-foreground">
                     {row.symbol}
                   </span>
-                  {row.enabled ? (
-                    <span className="flex items-center gap-1 text-[10px] font-semibold text-success">
-                      <Check className="h-3 w-3" />
-                      Saved
-                    </span>
-                  ) : (
-                    <span className="text-[10px] text-muted-foreground">
-                      Not saved
-                    </span>
-                  )}
-                </div>
-                <div className="mt-2 flex items-center gap-2">
-                  <label className="flex-1">
-                    <span className="mb-1 block text-[10px] uppercase tracking-wider text-muted-foreground">
-                      Lot size
-                    </span>
-                    <input
-                      type="number"
-                      min="0.01"
-                      step="0.01"
-                      value={row.lot}
-                      onChange={(e) => update(i, { lot: e.target.value })}
-                      className="w-full rounded-xl border border-input bg-background/60 px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <label className="flex-1">
-                    <span className="mb-1 block text-[10px] uppercase tracking-wider text-muted-foreground">
-                      Trades
-                    </span>
-                    <input
-                      type="number"
-                      min="1"
-                      step="1"
-                      value={row.trades}
-                      onChange={(e) => update(i, { trades: e.target.value })}
-                      className="w-full rounded-xl border border-input bg-background/60 px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => saveRow(i)}
-                    className={cn(
-                      "btn-gradient mt-4 rounded-xl px-4 py-2 text-xs font-semibold text-primary-foreground transition-transform active:scale-[0.97]",
-                      savedIdx === i && "ring-1 ring-success",
-                    )}
-                  >
-                    {savedIdx === i ? "Saved" : "Save"}
-                  </button>
-                </div>
-              </div>
-            ))}
+                  <Plus className="h-4 w-4 text-primary" />
+                </button>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Save all */}
+        <div className="border-t border-glass-border px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
+          <button
+            type="button"
+            onClick={saveAll}
+            className={cn(
+              "btn-gradient flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 font-display text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98]",
+              justSaved && "ring-1 ring-success",
+            )}
+          >
+            {justSaved ? (
+              <>
+                <Check className="h-4 w-4" />
+                Saved
+              </>
+            ) : selected.length > 0 ? (
+              `Save (${selected.length} pair${selected.length > 1 ? "s" : ""})`
+            ) : (
+              "Save"
+            )}
+          </button>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import {
   ScanLine,
   Settings as SettingsIcon,
 } from "lucide-react";
+import robotAvatar from "@/assets/robot-avatar.png";
 import { HomeTab, LogsSheet, PairsSheet } from "@/components/app/home-tab";
 import { MetaTraderTab } from "@/components/app/metatrader-tab";
 import { ScannerTab } from "@/components/app/scanner-tab";
@@ -103,6 +104,18 @@ function AppPage() {
         className="orb h-96 w-96 -top-24 left-1/2 -translate-x-1/2 bg-primary/30"
         aria-hidden
       />
+
+      {/* Robot avatar ambient background */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      >
+        <img
+          src={robotAvatar}
+          alt=""
+          className="absolute left-1/2 top-1/2 h-[85vmin] w-[85vmin] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover opacity-[0.08] blur-[6px]"
+        />
+      </div>
 
       <main className="relative z-10 flex-1 pb-28">
         {tab === "home" && (
