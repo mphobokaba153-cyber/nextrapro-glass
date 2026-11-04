@@ -8,20 +8,32 @@ type ScanResult = {
   confidence: string;
   entry: string;
   stop: string;
-  target: string;
+  tp1: string;
+  tp2: string;
+  tp3: string;
 };
+
+/* Matrix Scalper AI logic:
+   - Stop loss: 0.35% of entry price (opposite side)
+   - Take-profit steps: 0.65% of entry price per target (TP1/TP2/TP3) */
+const STOP_PCT = 0.0035;
+const TP_STEP_PCT = 0.0065;
 
 function analyse(): ScanResult {
   const buy = Math.random() > 0.5;
+  const dir = buy ? 1 : -1;
   const conf = Math.round(62 + Math.random() * 30);
   const entry = 1 + Math.round(Math.random() * 1000) / 1000;
+  const fmt = (v: number) => v.toFixed(4);
   return {
     trend: buy ? "Bullish" : "Bearish",
     signal: buy ? "BUY" : "SELL",
     confidence: `${conf}%`,
-    entry: entry.toFixed(4),
-    stop: (entry - 0.0025).toFixed(4),
-    target: (entry + 0.006).toFixed(4),
+    entry: fmt(entry),
+    stop: fmt(entry - dir * entry * STOP_PCT),
+    tp1: fmt(entry + dir * entry * TP_STEP_PCT),
+    tp2: fmt(entry + dir * entry * (TP_STEP_PCT * 2)),
+    tp3: fmt(entry + dir * entry * (TP_STEP_PCT * 3)),
   };
 }
 
@@ -151,16 +163,40 @@ export function ScannerTab() {
             </div>
             <div className="rounded-xl bg-glass p-2.5">
               <dt className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                Stop / Target
+                Stop Loss
               </dt>
               <dd className="mt-0.5 font-semibold text-foreground">
-                {result.stop} / {result.target}
+                {result.stop}
+              </dd>
+            </div>
+            <div className="rounded-xl bg-glass p-2.5">
+              <dt className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                TP1
+              </dt>
+              <dd className="mt-0.5 font-semibold text-success">
+                {result.tp1}
+              </dd>
+            </div>
+            <div className="rounded-xl bg-glass p-2.5">
+              <dt className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                TP2
+              </dt>
+              <dd className="mt-0.5 font-semibold text-success">
+                {result.tp2}
+              </dd>
+            </div>
+            <div className="col-span-2 rounded-xl bg-glass p-2.5">
+              <dt className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                TP3
+              </dt>
+              <dd className="mt-0.5 font-semibold text-success">
+                {result.tp3}
               </dd>
             </div>
           </dl>
           <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground">
-            Basic scan mode — full AI chart knowledge will be connected soon.
-            Not financial advice.
+            Matrix Scalper AI logic — Quasimodo setup, 0.35% stop loss and
+            0.65% take-profit steps. Not financial advice.
           </p>
         </div>
       )}

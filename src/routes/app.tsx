@@ -6,6 +6,7 @@ import {
   ScanLine,
   Settings as SettingsIcon,
 } from "lucide-react";
+import robotAvatar from "@/assets/robot-avatar.png";
 import { HomeTab, LogsSheet, PairsSheet } from "@/components/app/home-tab";
 import { MetaTraderTab } from "@/components/app/metatrader-tab";
 import { ScannerTab } from "@/components/app/scanner-tab";
