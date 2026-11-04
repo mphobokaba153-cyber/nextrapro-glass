@@ -105,6 +105,18 @@ function AppPage() {
         aria-hidden
       />
 
+      {/* Robot avatar ambient background */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      >
+        <img
+          src={robotAvatar}
+          alt=""
+          className="absolute left-1/2 top-1/2 h-[85vmin] w-[85vmin] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover opacity-[0.08] blur-[6px]"
+        />
+      </div>
+
       <main className="relative z-10 flex-1 pb-28">
         {tab === "home" && (
           <HomeTab
