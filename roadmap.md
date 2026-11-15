@@ -8,3 +8,4 @@
 Open for later (needs real backend):
 - [ ] Real signal feed (currently demo feed once pairs are saved)
 - [ ] License key activation screen
+- [ ] Connect existing NextraPro Supabase project (user must connect it in Settings → General → External Supabase, then verify before any schema changes)
