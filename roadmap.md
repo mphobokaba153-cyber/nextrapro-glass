@@ -1,7 +1,7 @@
 # Roadmap
 
-- [ ] Add secure MT5 bridge receiver and Windows polling helper for account snapshots plus OPEN / CLOSE / MODIFY events (additive tables only)
-- [ ] Verify receiver rejects missing credentials and document PC setup
+- [x] Add secure MT5 bridge receiver and Windows polling helper for account snapshots plus OPEN / CLOSE / MODIFY events (additive tables only)
+- [ ] Verify receiver rejects missing credentials and provide PC setup instructions
 
 - [x] App page (/app) with Home / MetaTrader / AI Scanner / Settings tabs and bottom glass tab bar
 - [x] Floating server bubble after Start — draggable, tap to open signal box

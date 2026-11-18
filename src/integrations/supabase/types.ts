@@ -14,7 +14,108 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      mt5_bridge_account_snapshots: {
+        Row: {
+          account_login: number
+          balance: number | null
+          currency: string | null
+          equity: number | null
+          id: string
+          last_synced_at: string
+          leverage: number | null
+          margin: number | null
+          margin_free: number | null
+          margin_level: number | null
+          server: string
+        }
+        Insert: {
+          account_login: number
+          balance?: number | null
+          currency?: string | null
+          equity?: number | null
+          id?: string
+          last_synced_at?: string
+          leverage?: number | null
+          margin?: number | null
+          margin_free?: number | null
+          margin_level?: number | null
+          server: string
+        }
+        Update: {
+          account_login?: number
+          balance?: number | null
+          currency?: string | null
+          equity?: number | null
+          id?: string
+          last_synced_at?: string
+          leverage?: number | null
+          margin?: number | null
+          margin_free?: number | null
+          margin_level?: number | null
+          server?: string
+        }
+        Relationships: []
+      }
+      mt5_bridge_events: {
+        Row: {
+          account_login: number
+          direction: string | null
+          event_id: string
+          event_type: string
+          id: string
+          occurred_at: string
+          payload: Json
+          price_current: number | null
+          price_open: number | null
+          profit: number | null
+          received_at: string
+          server: string
+          sl: number | null
+          symbol: string
+          ticket: number
+          tp: number | null
+          volume: number | null
+        }
+        Insert: {
+          account_login: number
+          direction?: string | null
+          event_id: string
+          event_type: string
+          id?: string
+          occurred_at: string
+          payload?: Json
+          price_current?: number | null
+          price_open?: number | null
+          profit?: number | null
+          received_at?: string
+          server: string
+          sl?: number | null
+          symbol: string
+          ticket: number
+          tp?: number | null
+          volume?: number | null
+        }
+        Update: {
+          account_login?: number
+          direction?: string | null
+          event_id?: string
+          event_type?: string
+          id?: string
+          occurred_at?: string
+          payload?: Json
+          price_current?: number | null
+          price_open?: number | null
+          profit?: number | null
+          received_at?: string
+          server?: string
+          sl?: number | null
+          symbol?: string
+          ticket?: number
+          tp?: number | null
+          volume?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
